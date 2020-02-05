@@ -1,0 +1,73 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+library(ISLR)
+#fix(Hitters)
+#names(Hitters)
+#sum(is.na((Hitters$Salary)))
+Hitters=na.omit(Hitters)
+#sum(is.na((Hitters$Salary)))
+library(leaps)
+regfit.full=regsubsets(Salary~.,Hitters,nvmax=22)
+summary(regfit.full)
+
+```
+
+```{r}
+par(mfrow=c(2,2))
+plot(reg.summary$rss,xlab = "no of variables", ylab = "RSS", type="l")
+plot(reg.summary$adjr2,type = "l")
+reg.summary$adjr2
+which.max(reg.summary$adjr2)
+points(8,reg.summary$adjr2[11], col="red", cex=2, pch=20)
+plot(reg.summary$cp,xlab = "no of variables", ylab = "RSS", type="l")
+plot(reg.summary$adjr2,type = "l")
+#reg.summary$adjr2
+which.min(reg.summary$cp)
+points(10,reg.summary$adjr2[10], col="red", cex=2, pch=20)
+```
+
+```{r}
+plot(regfit.full,scale = "r2")
+plot(regfit.full,scale = "adjr2")
+plot(regfit.full,scale = "Cp")
+plot(regfit.full,scale = "bic")
+```
+
+```{r}
+regfit.fwd=regsubsets(Salary~.,data=Hitters,nvmax = 5,method = "forward")
+summary(regfit.fwd)
+```
+
+```{r}
+regfit.bwd=regsubsets(Salary~.,data=Hitters,nvmax = 5,method = "backward")
+#summary(regfit.bwd)
+coef(regfit.bwd,3)
+```
+
+```{r}
+set.seed(1)
+train=sample(c(TRUE,FALSE), nrow(Hitters),rep=TRUE)
+test=(!train)
+regfit.best=regsubsets(Salary~.,data=Hitters[train,],nvmax = 19)
+test.mat=model.matrix(Salary~.,data = Hitters[test,])
+val.errors=rep(NA,19)
+#names(coef(regfit.best,id=3))
+for (i in 1:19){
+  coefi=coef(regfit.best,id=i)
+  pred=test.mat[,names(coefi)]%*%coefi
+  val.errors[i]=mean((Hitters$Salary[test]-pred)^2)
+}
+#val.errors
+which.min(val.errors)
+coef(regfit.best,10)
+```
+
+
