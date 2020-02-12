@@ -1,0 +1,142 @@
+---
+title: "6th"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1.
+(a) E[U 1 + U 2 + U 3 ]
+```{r}
+set.seed(1)
+U1<-runif(10000)
+U2<-runif(10000)
+U3<-runif(10000)
+mean((U1+U2+U3))
+```
+b.
+```{r}
+var(U1+U2+U3)
+```
+```{r}
+var(U1)+var(U2)+var(U3)
+```
+
+c.
+```{r}
+mean(sqrt(U1+U2+U3))
+```
+d.
+```{r}
+x<-(sqrt(U1)+sqrt(U2)+sqrt(U3))>=0.8
+#x
+sum(x==TRUE)/length(x)
+
+```
+
+2.a
+```{r}
+set.seed(2)
+x=runif(10)
+y<-(x>0.5)
+sum(y==TRUE)
+```
+b.
+```{r}
+set.seed(3)
+x=runif(1000)
+y<-(x>0.5)
+sum(y==TRUE)
+```
+
+3.
+```{r}
+set.seed(3)
+binsim<-rbinom(10000,20,0.3)
+#binsim
+```
+
+a.
+```{r}
+sum(binsim<=5)/length(binsim)
+```
+b.
+```{r}
+sum(binsim==5)/length(binsim)
+```
+c.
+```{r}
+mean(binsim)
+```
+d.
+```{r}
+var(binsim)
+```
+e.
+```{r}
+quantile(binsim,0.95)
+```
+f.
+```{r}
+quantile(binsim,0.99)
+```
+g.
+```{r}
+quantile(binsim,0.999999)
+#(boxplot(binsim))
+```
+
+4.
+```{r}
+
+```
+
+
+```{r}
+pbinom(4,6,0.5)
+x=rnorm(100000)
+x<-x[(0<x)& (x<3)]
+hist(x, probability = TRUE)
+```
+
+```{r}
+p <- matrix(c(0.99,0.01,0,0.5,0.4,0.1,0,0.25,0.75),3,3,byrow = TRUE)
+healthy <- numeric(10000)
+healthy[1]<-1
+for(t in 1:9999)
+  healthy[t+1] <- sample(1:3,size=1, prob=p[healthy[t],])
+table(healthy)
+sick <- numeric(10000)
+sick[1]<-3
+for(t in 1:9999)
+  sick[t+1] <- sample(1:3,size=1, prob=p[sick[t],])
+table(sick)
+```
+
+```{r}
+u <-runif(10000,min=2,max=5)
+mean(sin(u)*(5-2))
+```
+
+```{r}
+u <-runif(10000000,min=1,max=7)
+v <-runif(10000000,min=3,max=10)
+mean(sin(u-v))*42
+```
+
+```{r}
+u <-runif(1000000,max=2)
+v <-runif(1000000)
+x<- u[v<(1-abs(1-u))]
+plot(density(x))
+```
+
+```{r}
+x<- rexp(100000)
+w<- g(x)/dexp(x)
+mean <-weighted.mean(x,w)
+mean
+```
+
